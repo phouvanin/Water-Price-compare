@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Malaysia Bottled Water Price Research</title>
 <style>
 :root{--navy:#123b5d;--teal:#167d9a;--bg:#f3f7fa;--ink:#172b3a;--muted:#607384;--line:#dbe4eb}
@@ -85,3 +86,4 @@ function resetFilters(){search.value='';brand.value='';channel.value='';filterRo
 function applyRate(){let r=Number(document.getElementById('rate').value);if(!(r>0))return;document.querySelectorAll('#prices tbody tr').forEach(tr=>{let myr=Number(tr.querySelector('.price').textContent.replace('RM','').trim());tr.querySelector('.thb').textContent='฿ '+(myr*r).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})})}
 search.addEventListener('input',filterRows);brand.addEventListener('change',filterRows);channel.addEventListener('change',filterRows);
 </script></body></html>
+</body></html>
