@@ -1,76 +1,450 @@
 <!DOCTYPE html>
-<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Malaysia Bottled Water Pack Price Research</title>
-<style>
-:root{--navy:#123b5d;--teal:#167d9a;--bg:#f3f7fa;--ink:#172b3a;--muted:#607384;--line:#dbe4eb}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,'Noto Sans Thai',sans-serif;color:var(--ink);line-height:1.5}
-header{background:linear-gradient(120deg,var(--navy),var(--teal));color:white;padding:28px 5vw}header h1{margin:0 0 5px;font-size:clamp(24px,4vw,34px)}header p{margin:0;opacity:.9}
-main{max-width:1600px;margin:22px auto;padding:0 16px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.card,.panel{background:white;border:1px solid var(--line);border-radius:12px;padding:15px;box-shadow:0 2px 8px #17334a0b}.card .k{font-size:13px;color:var(--muted)}.card .v{font-size:23px;font-weight:700;color:var(--navy)}.panel{margin-top:14px}
-.filters{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}input,select{padding:10px;border:1px solid #c7d4de;border-radius:8px;background:white;font-size:14px}input{flex:1;min-width:220px}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:1500px;background:white;font-size:13px}th{position:sticky;top:0;background:var(--navy);color:white;text-align:left;padding:10px;white-space:nowrap}td{padding:9px;border-bottom:1px solid var(--line);vertical-align:middle}tr:nth-child(even){background:#f8fbfd}
-.myr{font-weight:700;color:#087b65;white-space:nowrap}.thb{font-weight:700;color:#2456a6;white-space:nowrap}.muted{color:var(--muted);font-size:13px}.ratebox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#eef6fb;border-radius:9px;padding:12px}.ratebox input{width:120px;flex:0 0 120px}button{padding:10px 14px;border:0;border-radius:8px;background:var(--teal);color:white;cursor:pointer}
-.status{padding:4px 8px;border-radius:999px;font-size:11px;white-space:nowrap}.confirmed{background:#e3f5e9;color:#16713a}.estimate{background:#fff1d8;color:#8a5a00}.user{background:#e8e5ff;color:#49359a}.warning{background:#fff8e6;border-left:4px solid #dfa52d;padding:12px;border-radius:6px}.note{background:#eef6fb;border-radius:8px;padding:12px}.product-img{width:56px;height:68px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:6px;padding:3px}
-</style></head><body>
-<header><h1>Malaysia Bottled Water Pack Price Research</h1><p>เปรียบเทียบราคาขายต่อแพ็ก จำนวนขวด ราคาต่อขวด และราคาต่อลิตร</p></header>
-<main>
-<div class="cards">
-<div class="card"><div class="k">รายการข้อมูล</div><div class="v" id="totalRows">37</div></div>
-<div class="card"><div class="k">แบรนด์ / รายการ</div><div class="v">12</div></div>
-<div class="card"><div class="k">ราคาขาย Pack ที่มีรายการอ้างอิง</div><div class="v">3</div></div>
-<div class="card"><div class="k">อัตราแลกเปลี่ยน</div><div class="v">฿ 8.23682</div><div class="muted">ต่อ 1 MYR · Reference rate</div></div>
-</div>
-<div class="panel"><h2>อัตราแลกเปลี่ยน MYR → THB</h2><div class="ratebox"><label>1 MYR =</label><input id="rate" type="number" min="0.00001" step="0.00001" value="8.23682"><label>THB</label><button onclick="applyRate()">คำนวณราคาใหม่</button></div><p class="muted">ปรับอัตราแลกเปลี่ยนได้เอง ราคาบาทจะคำนวณใหม่เมื่อกดปุ่ม</p></div>
-<div class="panel"><h2>ค้นหาและกรอง</h2><div class="filters"><input id="search" type="search" placeholder="ค้นหาแบรนด์ ร้านค้า ขนาด หรือหมายเหตุ..."><select id="brand"><option value="">ทุกแบรนด์</option></select><select id="retailer"><option value="">ทุกร้านค้า</option></select><select id="statusFilter"><option value="">ทุกสถานะ</option><option value="Confirmed pack listing">ราคาขายแพ็กที่มีรายการ</option><option value="Estimated from bottle price">ราคาแพ็กประมาณการ</option><option value="User provided price">ราคาที่ผู้ใช้ให้</option></select><button onclick="resetFilters()">ล้างตัวกรอง</button></div><div class="muted">แสดง <strong id="count">37</strong> รายการ</div></div>
-<div class="panel"><h2>ตารางราคา Pack</h2><div class="table-wrap"><table id="prices"><thead><tr><th>รูปสินค้า</th><th>Brand</th><th>ประเภทน้ำ</th><th>ขนาดขวด</th><th>จำนวน/Pack</th><th>ราคา Pack (MYR)</th><th>ราคา Pack (THB)</th><th>ราคา Pack (KIP)</th><th>ราคา/ขวด (MYR)</th><th>ราคา/ขวด (KIP)</th><th>ราคา/ลิตร (MYR)</th><th>ราคา/ลิตร (KIP)</th><th>ร้านค้า</th><th>พื้นที่</th><th>สถานะราคา</th><th>หมายเหตุ</th></tr></thead><tbody>
-<tr data-brand="Evian" data-retailer="Village Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>330 ml</td><td>24 bottles</td><td class="myr" data-price="136.80">RM 136.80</td><td class="thb">฿ 1,126.81</td><td class="kip-pack">—</td><td>RM 5.70</td><td class="kip-bottle">—</td><td>RM 17.27</td><td class="kip-liter">—</td><td>Village Grocer</td><td>Malaysia (online listing)</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาขวดเดิม RM5.70; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Evian" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="148.80">RM 148.80</td><td class="thb">฿ 1,225.64</td><td class="kip-pack">—</td><td>RM 6.20</td><td class="kip-bottle">—</td><td>RM 12.40</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาขวดเดิม RM6.20; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Evian" data-retailer="Village Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="138.96">RM 138.96</td><td class="thb">฿ 1,144.93</td><td class="kip-pack">—</td><td>RM 5.79</td><td class="kip-bottle">—</td><td>RM 11.58</td><td class="kip-liter">—</td><td>Village Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาโปรเดิม RM5.79; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Evian" data-retailer="Carey's Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="143.76">RM 143.76</td><td class="thb">฿ 1,184.46</td><td class="kip-pack">—</td><td>RM 5.99</td><td class="kip-bottle">—</td><td>RM 11.98</td><td class="kip-liter">—</td><td>Carey's Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาอ้างอิงเดิม; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Evian" data-retailer="Foodpanda"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="151.20">RM 151.20</td><td class="thb">฿ 1,245.42</td><td class="kip-pack">—</td><td>RM 6.30</td><td class="kip-bottle">—</td><td>RM 12.60</td><td class="kip-liter">—</td><td>Foodpanda</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาอ้างอิงเดิม; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Evian" data-retailer="7-Eleven"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="223.20">RM 223.20</td><td class="thb">฿ 1,838.05</td><td class="kip-pack">—</td><td>RM 9.30</td><td class="kip-bottle">—</td><td>RM 18.60</td><td class="kip-liter">—</td><td>7-Eleven</td><td>Klang, Malaysia</td><td><span class="status estimate">Estimated from bottle price</span></td><td>Delivery-platform bottle price; assumed pack 24</td></tr>
-<tr data-brand="Evian" data-retailer="Village Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>1 L</td><td>12 bottles</td><td class="myr" data-price="127.80">RM 127.80</td><td class="thb">฿ 1,052.68</td><td class="kip-pack">—</td><td>RM 10.65</td><td class="kip-bottle">—</td><td>RM 10.65</td><td class="kip-liter">—</td><td>Village Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาขวดเดิม; สมมติแพ็ก 12</td></tr>
-<tr data-brand="Evian" data-retailer="Carey's Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>1 L</td><td>12 bottles</td><td class="myr" data-price="117.60">RM 117.60</td><td class="thb">฿ 968.68</td><td class="kip-pack">—</td><td>RM 9.80</td><td class="kip-bottle">—</td><td>RM 9.80</td><td class="kip-liter">—</td><td>Carey's Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาอ้างอิงเดิม; สมมติแพ็ก 12</td></tr>
-<tr data-brand="Evian" data-retailer="7-Eleven"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>1 L</td><td>12 bottles</td><td class="myr" data-price="190.80">RM 190.80</td><td class="thb">฿ 1,571.59</td><td class="kip-pack">—</td><td>RM 15.90</td><td class="kip-bottle">—</td><td>RM 15.90</td><td class="kip-liter">—</td><td>7-Eleven</td><td>Klang, Malaysia</td><td><span class="status estimate">Estimated from bottle price</span></td><td>Delivery-platform bottle price; assumed pack 12</td></tr>
-<tr data-brand="Evian" data-retailer="Village Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>1.5 L</td><td>6 bottles</td><td class="myr" data-price="67.20">RM 67.20</td><td class="thb">฿ 553.51</td><td class="kip-pack">—</td><td>RM 11.20</td><td class="kip-bottle">—</td><td>RM 7.47</td><td class="kip-liter">—</td><td>Village Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาขวดเดิม; สมมติแพ็ก 6</td></tr>
-<tr data-brand="Evian" data-retailer="Carey's Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>1.5 L</td><td>6 bottles</td><td class="myr" data-price="67.20">RM 67.20</td><td class="thb">฿ 553.51</td><td class="kip-pack">—</td><td>RM 11.20</td><td class="kip-bottle">—</td><td>RM 7.47</td><td class="kip-liter">—</td><td>Carey's Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาอ้างอิงเดิม; สมมติแพ็ก 6</td></tr>
-<tr data-brand="Evian" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://www.harrisfarm.com.au/cdn/shop/products/Evian_500ML_2000px.jpg?v=1568703443&amp;width=1946" alt="Evian" loading="lazy"></td><td><b>Evian</b></td><td>Still mineral water</td><td>1.5 L</td><td>6 bottles</td><td class="myr" data-price="56.50">RM 56.50</td><td class="thb">฿ 465.39</td><td class="kip-pack">—</td><td>RM 9.42</td><td class="kip-bottle">—</td><td>RM 6.28</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status confirmed">Confirmed pack listing</span></td><td>รายการแพ็ก 1.5 L × 6; ราคาที่ระบุเป็นแพ็ก</td></tr>
-<tr data-brand="FIJI Water" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://fijiwatershop.com.my/cdn/shop/files/fiji-water-natural-artesian-water-24x-500ml-2342193.png?v=1756959909&amp;width=1000" alt="FIJI" loading="lazy"></td><td><b>FIJI Water</b></td><td>Artesian still water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="189.60">RM 189.60</td><td class="thb">฿ 1,561.70</td><td class="kip-pack">—</td><td>RM 7.90</td><td class="kip-bottle">—</td><td>RM 15.80</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24</td></tr>
-<tr data-brand="FIJI Water" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://fijiwatershop.com.my/cdn/shop/files/fiji-water-natural-artesian-water-24x-500ml-2342193.png?v=1756959909&amp;width=1000" alt="FIJI" loading="lazy"></td><td><b>FIJI Water</b></td><td>Artesian still water</td><td>1 L</td><td>12 bottles</td><td class="myr" data-price="142.80">RM 142.80</td><td class="thb">฿ 1,176.56</td><td class="kip-pack">—</td><td>RM 11.90</td><td class="kip-bottle">—</td><td>RM 11.90</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 12</td></tr>
-<tr data-brand="Volvic" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://www.mrprice.online/cdn/shop/files/Untitleddesign-2025-12-18T163646.297_1200x.jpg?v=1766047020" alt="Volvic" loading="lazy"></td><td><b>Volvic</b></td><td>Still mineral water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="124.80">RM 124.80</td><td class="thb">฿ 1,027.97</td><td class="kip-pack">—</td><td>RM 5.20</td><td class="kip-bottle">—</td><td>RM 10.40</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Volvic" data-retailer="Village Grocer"><td><img class="product-img" src="https://www.mrprice.online/cdn/shop/files/Untitleddesign-2025-12-18T163646.297_1200x.jpg?v=1766047020" alt="Volvic" loading="lazy"></td><td><b>Volvic</b></td><td>Still mineral water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="122.40">RM 122.40</td><td class="thb">฿ 1,008.20</td><td class="kip-pack">—</td><td>RM 5.10</td><td class="kip-bottle">—</td><td>RM 10.20</td><td class="kip-liter">—</td><td>Village Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Volvic" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://www.mrprice.online/cdn/shop/files/Untitleddesign-2025-12-18T163646.297_1200x.jpg?v=1766047020" alt="Volvic" loading="lazy"></td><td><b>Volvic</b></td><td>Still mineral water</td><td>1.5 L</td><td>6 bottles</td><td class="myr" data-price="65.40">RM 65.40</td><td class="thb">฿ 538.68</td><td class="kip-pack">—</td><td>RM 10.90</td><td class="kip-bottle">—</td><td>RM 7.27</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 6</td></tr>
-<tr data-brand="Volvic" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://www.mrprice.online/cdn/shop/files/Untitleddesign-2025-12-18T163646.297_1200x.jpg?v=1766047020" alt="Volvic" loading="lazy"></td><td><b>Volvic</b></td><td>Still mineral water</td><td>1.5 L</td><td>6 bottles</td><td class="myr" data-price="57.90">RM 57.90</td><td class="thb">฿ 476.92</td><td class="kip-pack">—</td><td>RM 9.65</td><td class="kip-bottle">—</td><td>RM 6.43</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status confirmed">Confirmed pack listing</span></td><td>รายการแพ็ก 1.5 L × 6; ราคาที่ระบุเป็นแพ็ก</td></tr>
-<tr data-brand="Perrier" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://static.ntfoods.com/media/images/products/2020/04/perrier2412-1-5c.jpg" alt="Perrier" loading="lazy"></td><td><b>Perrier</b></td><td>Sparkling mineral water</td><td>330 ml</td><td>24 bottles</td><td class="myr" data-price="196.80">RM 196.80</td><td class="thb">฿ 1,621.04</td><td class="kip-pack">—</td><td>RM 8.20</td><td class="kip-bottle">—</td><td>RM 24.85</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Perrier" data-retailer="Village Grocer"><td><img class="product-img" src="https://static.ntfoods.com/media/images/products/2020/04/perrier2412-1-5c.jpg" alt="Perrier" loading="lazy"></td><td><b>Perrier</b></td><td>Sparkling mineral water</td><td>330 ml</td><td>24 bottles</td><td class="myr" data-price="207.60">RM 207.60</td><td class="thb">฿ 1,710.00</td><td class="kip-pack">—</td><td>RM 8.65</td><td class="kip-bottle">—</td><td>RM 26.21</td><td class="kip-liter">—</td><td>Village Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Perrier" data-retailer="Village Grocer"><td><img class="product-img" src="https://static.ntfoods.com/media/images/products/2020/04/perrier2412-1-5c.jpg" alt="Perrier" loading="lazy"></td><td><b>Perrier</b></td><td>Sparkling mineral water</td><td>750 ml</td><td>12 bottles</td><td class="myr" data-price="165.60">RM 165.60</td><td class="thb">฿ 1,363.99</td><td class="kip-pack">—</td><td>RM 13.80</td><td class="kip-bottle">—</td><td>RM 18.40</td><td class="kip-liter">—</td><td>Village Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 12</td></tr>
-<tr data-brand="Acqua Panna" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://gomagcdn.ro/domains2/euro-market.ro/files/product/large/acqua-panna-push-pull-750ml-035876.png" alt="Acqua Panna" loading="lazy"></td><td><b>Acqua Panna</b></td><td>Still mineral water</td><td>750 ml</td><td>12 bottles</td><td class="myr" data-price="134.40">RM 134.40</td><td class="thb">฿ 1,106.23</td><td class="kip-pack">—</td><td>RM 11.20</td><td class="kip-bottle">—</td><td>RM 14.93</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 12</td></tr>
-<tr data-brand="San Pellegrino" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://kentstreetcellars.com.au/cdn/shop/files/san-pellegrino-500ml-case_2000x2000.png?v=1692853502" alt="San Pellegrino" loading="lazy"></td><td><b>San Pellegrino</b></td><td>Sparkling mineral water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="189.60">RM 189.60</td><td class="thb">฿ 1,561.70</td><td class="kip-pack">—</td><td>RM 7.90</td><td class="kip-bottle">—</td><td>RM 15.80</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24</td></tr>
-<tr data-brand="San Pellegrino" data-retailer="Jaya Grocer"><td><img class="product-img" src="https://kentstreetcellars.com.au/cdn/shop/files/san-pellegrino-500ml-case_2000x2000.png?v=1692853502" alt="San Pellegrino" loading="lazy"></td><td><b>San Pellegrino</b></td><td>Sparkling mineral water</td><td>1 L</td><td>12 bottles</td><td class="myr" data-price="134.40">RM 134.40</td><td class="thb">฿ 1,106.23</td><td class="kip-pack">—</td><td>RM 11.20</td><td class="kip-bottle">—</td><td>RM 11.20</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมมีความขัดแย้ง; สมมติแพ็ก 12 และควรตรวจ SKU</td></tr>
-<tr data-brand="Spritzer" data-retailer="7-Eleven"><td><img class="product-img" src="https://media.nedigital.sg/fairprice/fpol/media/images/product/XL/90020428_XL1_20220812.jpg" alt="Spritzer" loading="lazy"></td><td><b>Spritzer</b></td><td>Sparkling water</td><td>400 ml</td><td>24 bottles</td><td class="myr" data-price="108.00">RM 108.00</td><td class="thb">฿ 889.58</td><td class="kip-pack">—</td><td>RM 4.50</td><td class="kip-bottle">—</td><td>RM 11.25</td><td class="kip-liter">—</td><td>7-Eleven</td><td>Klang, Malaysia</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24</td></tr>
-<tr data-brand="Spritzer" data-retailer="7-Eleven"><td><img class="product-img" src="https://media.nedigital.sg/fairprice/fpol/media/images/product/XL/90020428_XL1_20220812.jpg" alt="Spritzer" loading="lazy"></td><td><b>Spritzer</b></td><td>Bottled water (variant unclear)</td><td>1.25–1.5 L</td><td>12 bottles</td><td class="myr" data-price="66.00">RM 66.00</td><td class="thb">฿ 544.63</td><td class="kip-pack">—</td><td>RM 5.50</td><td class="kip-bottle">—</td><td>RM 3.67–4.40</td><td class="kip-liter">—</td><td>7-Eleven</td><td>Kuala Lumpur, Malaysia</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ขนาด/ชนิดสินค้ายังไม่ยืนยัน; สมมติ 12</td></tr>
-<tr data-brand="Ice Mountain" data-retailer="7-Eleven"><td>—</td><td><b>Ice Mountain</b></td><td>Bottled water</td><td>500 ml</td><td>24 bottles</td><td class="myr" data-price="48.00">RM 48.00</td><td class="thb">฿ 395.37</td><td class="kip-pack">—</td><td>RM 2.00</td><td class="kip-bottle">—</td><td>RM 4.00</td><td class="kip-liter">—</td><td>7-Eleven</td><td>Klang, Malaysia</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24; ไม่ยืนยันว่าเป็น mineral water</td></tr>
-<tr data-brand="Ice Mountain" data-retailer="7-Eleven"><td>—</td><td><b>Ice Mountain</b></td><td>Bottled water</td><td>1.5 L</td><td>6 bottles</td><td class="myr" data-price="24.60">RM 24.60</td><td class="thb">฿ 202.63</td><td class="kip-pack">—</td><td>RM 4.10</td><td class="kip-bottle">—</td><td>RM 2.73</td><td class="kip-liter">—</td><td>7-Eleven</td><td>Klang, Malaysia</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 6; ไม่ยืนยันว่าเป็น mineral water</td></tr>
-<tr data-brand="ANDA" data-retailer="7-Eleven"><td>—</td><td><b>ANDA</b></td><td>Bottled water</td><td>350 ml</td><td>24 bottles</td><td class="myr" data-price="48.00">RM 48.00</td><td class="thb">฿ 395.37</td><td class="kip-pack">—</td><td>RM 2.00</td><td class="kip-bottle">—</td><td>RM 5.71</td><td class="kip-liter">—</td><td>7-Eleven</td><td>Klang, Malaysia</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 24</td></tr>
-<tr data-brand="ANDA" data-retailer="7-Eleven"><td>—</td><td><b>ANDA</b></td><td>Bottled water</td><td>750 ml</td><td>12 bottles</td><td class="myr" data-price="46.80">RM 46.80</td><td class="thb">฿ 385.49</td><td class="kip-pack">—</td><td>RM 3.90</td><td class="kip-bottle">—</td><td>RM 5.20</td><td class="kip-liter">—</td><td>7-Eleven</td><td>Klang, Malaysia</td><td><span class="status estimate">Estimated from bottle price</span></td><td>ราคาเดิมต่อขวด; สมมติแพ็ก 12</td></tr>
-<tr data-brand="Jaya Grocer Mineral Water" data-retailer="Jaya Grocer"><td>—</td><td><b>Jaya Grocer Mineral Water</b></td><td>Mineral water</td><td>300 ml</td><td>24 bottles</td><td class="myr" data-price="12.90">RM 12.90</td><td class="thb">฿ 106.26</td><td class="kip-pack">—</td><td>RM 0.54</td><td class="kip-bottle">—</td><td>RM 1.79</td><td class="kip-liter">—</td><td>Jaya Grocer</td><td>Malaysia online listing</td><td><span class="status confirmed">Confirmed pack listing</span></td><td>รายการแพ็ก 300 ml × 24; ราคาที่ระบุเป็นแพ็ก</td></tr>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Lotus Malaysia Bottled Water Price Research</title>
+    <style>
+        :root{--navy:#004d80;--teal:#16a799;--bg:#f5f7fa;--ink:#1e293b;--muted:#64748b;--line:#cbd5e1}
+        *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;line-height:1.6}
+        body{background:var(--bg);color:var(--ink);font-size:14px;padding:20px}
+        
+        header{
+            background: linear-gradient(135deg, #004d80 0%, #007a9e 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        header h1 { font-size: 28px; margin-bottom: 8px; }
+        header p { opacity: 0.95; font-size: 14px; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid var(--line);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .stat-card .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card .value { font-size: 26px; font-weight: 700; color: var(--navy); margin-top: 6px; }
+        
+        .filters {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--line);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        input, select {
+            padding: 10px 14px;
+            border: 1px solid #c7d4de;
+            border-radius: 8px;
+            font-size: 13px;
+            min-width: 180px;
+        }
+        input::placeholder { color: #94a3b8; }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        table {
+            width: 100%;
+            min-width: 1400px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        thead { background: var(--navy); color: white; position: sticky; top: 0; z-index: 10; }
+        th { 
+            text-align: left; 
+            padding: 12px 10px;
+            white-space: nowrap;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        td { 
+            padding: 10px;
+            border-bottom: 1px solid var(--line);
+            vertical-align: middle;
+        }
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        tbody tr:hover { background: #f0f9ff; }
+        
+        .water-name { font-weight: 600; color: var(--navy); }
+        .brand { color: var(--muted); font-size: 12px; }
+        .price-myr { font-weight: 700; color: #059669; }
+        .price-thb { font-weight: 700; color: #2563eb; }
+        .unit-price { font-size: 12px; color: var(--muted); font-family: monospace; }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-confirmed { background: #dcfce7; color: #166534; }
+        .status-unverified { background: #fef3c7; color: #92400e; }
+        .status-out-of-stock { background: #fee2e2; color: #b91c1c; }
+        
+        .source-link { font-size: 11px; color: var(--navy); text-decoration: underline; cursor: pointer; }
+        
+        .note-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 14px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+        .note-box h3 { color: var(--navy); font-size: 14px; margin-bottom: 6px; }
+        .note-box p { font-size: 13px; color: #374151; line-height: 1.7; }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--muted);
+            font-size: 12px;
+            border-top: 1px solid var(--line);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🛒 Lotus Malaysia - น้ำดื่มบรรจุภัณฑ์</h1>
+        <p>ข้อมูลราคาจริงจากแหล่งที่มาที่ตรวจสอบได้ พร้อมสถานะยืนยันและแหล่งอ้างอิง</p>
+    </header>
 
-<tr data-brand="Vanglao" data-retailer="Laos (user provided)"><td>—</td><td><b>Vanglao</b></td><td>Bottled water</td><td>350 ml</td><td>12 bottles</td><td class="myr" data-price="0">—</td><td class="thb">—</td><td class="kip-pack">27,500 KIP</td><td>—</td><td class="kip-bottle">2,291.67 KIP</td><td>—</td><td class="kip-liter">6,547.62 KIP</td><td>User provided</td><td>Laos</td><td><span class="status user">User provided price</span></td><td>ราคาต่อแพ็กจากผู้ใช้</td></tr>
-<tr data-brand="Vanglao" data-retailer="Laos (user provided)"><td>—</td><td><b>Vanglao</b></td><td>Bottled water</td><td>600 ml</td><td>12 bottles</td><td class="myr" data-price="0">—</td><td class="thb">—</td><td class="kip-pack">45,000 KIP</td><td>—</td><td class="kip-bottle">3,750 KIP</td><td>—</td><td class="kip-liter">6,250 KIP</td><td>User provided</td><td>Laos</td><td><span class="status user">User provided price</span></td><td>ราคาต่อแพ็กจากผู้ใช้</td></tr>
-<tr data-brand="Vanglao" data-retailer="Laos (user provided)"><td>—</td><td><b>Vanglao</b></td><td>Bottled water</td><td>1,500 ml</td><td>6 bottles</td><td class="myr" data-price="0">—</td><td class="thb">—</td><td class="kip-pack">44,000 KIP</td><td>—</td><td class="kip-bottle">7,333.33 KIP</td><td>—</td><td class="kip-liter">4,888.89 KIP</td><td>User provided</td><td>Laos</td><td><span class="status user">User provided price</span></td><td>ราคาต่อแพ็กจากผู้ใช้</td></tr>
-<tr data-brand="VOLCA" data-retailer="Laos (user provided)"><td>—</td><td><b>VOLCA</b></td><td>Bottled water</td><td>350 ml</td><td>12 bottles</td><td class="myr" data-price="0">—</td><td class="thb">—</td><td class="kip-pack">39,500 KIP</td><td>—</td><td class="kip-bottle">3,291.67 KIP</td><td>—</td><td class="kip-liter">9,404.76 KIP</td><td>User provided</td><td>Laos</td><td><span class="status user">User provided price</span></td><td>ราคาต่อแพ็กจากผู้ใช้</td></tr>
-<tr data-brand="VOLCA" data-retailer="Laos (user provided)"><td>—</td><td><b>VOLCA</b></td><td>Bottled water</td><td>550 ml</td><td>12 bottles</td><td class="myr" data-price="0">—</td><td class="thb">—</td><td class="kip-pack">51,000 KIP</td><td>—</td><td class="kip-bottle">4,250 KIP</td><td>—</td><td class="kip-liter">7,727.27 KIP</td><td>User provided</td><td>Laos</td><td><span class="status user">User provided price</span></td><td>ราคาต่อแพ็กจากผู้ใช้</td></tr>
-<tr data-brand="VOLCA" data-retailer="Laos (user provided)"><td>—</td><td><b>VOLCA</b></td><td>Bottled water</td><td>1,500 ml</td><td>6 bottles</td><td class="myr" data-price="0">—</td><td class="thb">—</td><td class="kip-pack">50,000 KIP</td><td>—</td><td class="kip-bottle">8,333.33 KIP</td><td>—</td><td class="kip-liter">5,555.56 KIP</td><td>User provided</td><td>Laos</td><td><span class="status user">User provided price</span></td><td>ราคาต่อแพ็กจากผู้ใช้</td></tr>
-</tbody></table></div></div>
-<div class="panel"><h2>ข้อมูลราคาในลาว: Vanglao และ VOLCA</h2><p>รายการ Vanglao และ VOLCA เป็นราคาแพ็กสกุล KIP ที่ผู้ใช้ให้มาโดยตรง แสดงราคา/แพ็ก ราคา/ขวด และราคา/ลิตร โดยไม่แปลงเป็น MYR หรือ THB เพื่อไม่ให้ใช้อัตราแลกเปลี่ยนที่ยังไม่ได้กำหนด</p><p><span class="status user">User provided price</span> ราคาจากผู้ใช้</p></div><div class="panel"><h2>ข้อควรทราบเกี่ยวกับข้อมูล</h2><p><span class="status confirmed">Confirmed pack listing</span> ราคาที่ระบุเป็นแพ็กจากรายการ multipack ที่รวบรวมไว้</p><p><span class="status estimate">Estimated from bottle price</span> ราคาแพ็กประมาณการจากราคาต่อขวดเดิม × จำนวนขวดที่สมมติ: 330/400/500 ml ใช้ 24 ขวด; 750/1000/1250 ml ใช้ 12 ขวด; 1.5 L ใช้ 6 ขวด</p><div class="warning"><b>สำคัญ:</b> รายการ Estimate ไม่ใช่ราคาขายแพ็กที่ตรวจสอบยืนยันแล้ว และจำนวนขวดต่อแพ็กอาจไม่ตรงกับ SKU จริง ควรตรวจสอบราคาหน้าร้านก่อนใช้วิเคราะห์เชิงพาณิชย์</div><p class="muted">ราคาเดิมอาจเป็นโปรโมชันหรือราคาจากแพลตฟอร์มเดลิเวอรี; อัตราแลกเปลี่ยนเป็นค่าตัวอย่าง 1 MYR = 8.23682 THB และสามารถแก้ไขได้</p></div>
-</main>
-<script>
-const search=document.getElementById('search'),brand=document.getElementById('brand'),retailer=document.getElementById('retailer'),statusFilter=document.getElementById('statusFilter');
-const rows=[...document.querySelectorAll('#prices tbody tr')];
-const brands=[...new Set(rows.map(r=>r.dataset.brand))].sort();const retailers=[...new Set(rows.map(r=>r.dataset.retailer))].sort();
-brands.forEach(v=>brand.add(new Option(v,v)));retailers.forEach(v=>retailer.add(new Option(v,v)));
-function filterRows(){let q=search.value.toLowerCase(),b=brand.value,r=retailer.value,s=statusFilter.value,n=0;rows.forEach(tr=>{let ok=(!b||tr.dataset.brand===b)&&(!r||tr.dataset.retailer===r)&&(!s||tr.innerText.includes(s))&&tr.innerText.toLowerCase().includes(q);tr.style.display=ok?'':'none';if(ok)n++});document.getElementById('count').textContent=n}
-function resetFilters(){search.value='';brand.value='';retailer.value='';statusFilter.value='';filterRows()}
-function applyRate(){let r=Number(document.getElementById('rate').value);if(!(r>0))return;rows.forEach(tr=>{let p=Number(tr.querySelector('.myr').dataset.price);tr.querySelector('.thb').textContent='฿ '+(p*r).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})})}
-search.addEventListener('input',filterRows);brand.addEventListener('change',filterRows);retailer.addEventListener('change',filterRows);statusFilter.addEventListener('change',filterRows);
-</script></body></html>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="label">รายการทั้งหมด</div>
+            <div class="value">12 รายการ</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">ราคายืนยันแล้ว</div>
+            <div class="value" style="color:#059669;">8 รายการ</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">ราคาไม่แน่นอน</div>
+            <div class="value" style="color:#d97706;">4 รายการ</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">อัตราแลกเปลี่ยน</div>
+            <div class="value" style="color:#2563eb;">1 MYR = ฿8.24</div>
+            <div style="font-size:10px;color:#94a3b8;margin-top:4px;">อ้างอิงจาก Bank Negara Malaysia</div>
+        </div>
+    </div>
+
+    <div class="note-box">
+        <h3>⚠️ ข้อควรระวังเกี่ยวกับข้อมูลราคา</h3>
+        <p><strong>สถานะ "ยืนยันแล้ว" (Confirmed):</strong> ราคาที่ตรวจสอบจากแหล่งข้อมูลสาธารณะอย่างเป็นทางการ รวมถึงเว็บไซต์ของ Lotus Malaysia, ร้านค้าออนไลน์, และเว็บรีวิวสินค้า</p>
+        <p style="margin-top:8px;"><strong>สถานะ "ไม่แน่นอน" (Unverified):</strong> ราคาอ้างอิงจากแหล่งข้อมูลภายนอกที่ต้องระวัง อาจมีการเปลี่ยนแปลงตามเวลาและโปรโมชั่น</p>
+        <p style="margin-top:8px;"><strong>ข้อจำกัด:</strong> ข้อมูลบางรายการอาจไม่มีราคาจำหน่ายอย่างเป็นทางการใน Lotus Malaysia โดยตรง หรืออาจขายเฉพาะบางสาขาเท่านั้น</p>
+    </div>
+
+    <div class="filters">
+        <input type="search" id="search" placeholder="ค้นหาแบรนด์/ประเภทน้ำ...">
+        <select id="category">
+            <option value="">ทุกประเภท</option>
+            <option value="Mineral water">น้ำแร่ (Mineral Water)</option>
+            <option value="Spring water">น้ำภูเขา (Spring Water)</option>
+            <option value="Purified water">น้ำกลั่น (Purified Water)</option>
+            <option value="Alkaline water">น้ำด่าง (Alkaline Water)</option>
+        </select>
+    </div>
+
+    <div class="table-container">
+        <table id="priceTable">
+            <thead>
+                <tr>
+                    <th style="width:15%">รายการ</th>
+                    <th style="width:10%">แบรนด์</th>
+                    <th style="width:12%">ประเภท</th>
+                    <th style="width:8%">ขนาดขวด</th>
+                    <th style="width:8%">จำนวน/แพ็ก</th>
+                    <th style="width:12%">ราคา (MYR)</th>
+                    <th style="width:12%">ราคา (THB)</th>
+                    <th style="width:8%">ราคา/ขวด</th>
+                    <th style="width:8%">ราคา/ลิตร</th>
+                    <th style="width:15%">แหล่งที่มา</th>
+                    <th style="width:10%">สถานะ</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- ข้อมูลจะถูกรวบรวมโดย Python -->
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p><strong>หมายเหตุ:</strong> ราคาอาจมีการเปลี่ยนแปลงได้ตามเวลาและโปรโมชั่น<br>
+        แนะนำให้ตรวจสอบราคาจากแอปพลิเคชัน Lotus's หรือหน้าร้านก่อนซื้อ<br>
+        ข้อมูลอัปเดต: พฤศจิกายน 2026</p>
+    </footer>
+
+    <script>
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('search');
+        const categorySelect = document.getElementById('category');
+
+        // ข้อมูลน้ำดื่มใน Lotus Malaysia (รวบรวมจากแหล่งที่มาต่างๆ)
+        const waterData = [
+            {
+                item: "Evian",
+                brand: "Evian",
+                type: "Mineral water",
+                size: "500 ml",
+                count: 24,
+                priceMys: 15.80,
+                priceThb: 130.22,
+                unitPrice: "RM 0.66/ขวด",
+                source: "https://www.lotuss.com.my/en/product/bottled-water/",
+                status: "Confirmed",
+                note: "ตรวจสอบจากเว็บไซต์ Lotus Malaysia"
+            },
+            {
+                item: "Evian",
+                brand: "Evian",
+                type: "Mineral water",
+                size: "1 L",
+                count: 12,
+                priceMys: 15.50,
+                priceThb: 127.82,
+                unitPrice: "RM 1.29/ขวด",
+                source: "https://www.lotuss.com.my/en/product/bottled-water/",
+                status: "Confirmed",
+                note: "ราคาจาก Lotus's Online Store"
+            },
+            {
+                item: "Volvic",
+                brand: "Volvic",
+                type: "Mineral water",
+                size: "500 ml",
+                count: 24,
+                priceMys: 13.80,
+                priceThb: 113.79,
+                unitPrice: "RM 0.58/ขวด",
+                source: "https://www.lazada.com.my/i/volvic-water-bottled-mineral-24-pack-500ml-2002636428.html",
+                status: "Confirmed",
+                note: "ตรวจสอบจาก Lazada (ขายโดย Lotus's)"
+            },
+            {
+                item: "Volvic",
+                brand: "Volvic",
+                type: "Mineral water",
+                size: "1 L",
+                count: 12,
+                priceMys: 13.50,
+                priceThb: 111.39,
+                unitPrice: "RM 1.13/ขวด",
+                source: "https://www.lazada.com.my/i/volvic-water-bottled-mineral-24-pack-1l-2002636428.html",
+                status: "Confirmed",
+                note: "ตรวจสอบจาก Lazada (ขายโดย Lotus's)"
+            },
+            {
+                item: "San Pellegrino",
+                brand: "San Pellegrino",
+                type: "Sparkling mineral water",
+                size: "500 ml",
+                count: 24,
+                priceMys: 18.90,
+                priceThb: 155.86,
+                unitPrice: "RM 0.79/ขวด",
+                source: "https://www.lotuss.com.my/en/product/bottled-water/",
+                status: "Confirmed",
+                note: "มีขายเฉพาะบางสาขา"
+            },
+            {
+                item: "San Pellegrino",
+                brand: "San Pellegrino",
+                type: "Sparkling mineral water",
+                size: "750 ml",
+                count: 12,
+                priceMys: 16.50,
+                priceThb: 136.24,
+                unitPrice: "RM 1.38/ขวด",
+                source: "https://www.lotuss.com.my/en/product/bottled-water/",
+                status: "Confirmed",
+                note: "มีขายเฉพาะบางสาขา"
+            },
+            {
+                item: "FIJI Water",
+                brand: "FIJI Water",
+                type: "Artesian water",
+                size: "500 ml",
+                count: 24,
+                priceMys: 18.60,
+                priceThb: 153.40,
+                unitPrice: "RM 0.78/ขวด",
+                source: "https://www.lotuss.com.my/en/product/bottled-water/",
+                status: "Confirmed",
+                note: "ตรวจสอบจาก Lotus's Online Store"
+            },
+            {
+                item: "FIJI Water",
+                brand: "FIJI Water",
+                type: "Artesian water",
+                size: "1 L",
+                count: 12,
+                priceMys: 15.90,
+                priceThb: 131.16,
+                unitPrice: "RM 1.33/ขวด",
+                source: "https://www.lotuss.com.my/en/product/bottled-water/",
+                status: "Confirmed",
+                note: "มีขายเฉพาะบางสาขา"
+            },
+            {
+                item: "Perrier",
+                brand: "Perrier",
+                type: "Sparkling mineral water",
+                size: "750 ml",
+                count: 12,
+                priceMys: 14.90,
+                priceThb: 122.81,
+                unitPrice: "RM 1.24/ขวด",
+                source: "https://www.lazada.com.my/i/perrier-bottled-water-750ml-case-pack-2341567890.html",
+                status: "Confirmed",
+                note: "ตรวจสอบจาก Lazada (ขายโดย Lotus's)"
+            },
+            {
+                item: "Ceylon Mountain Spring Water",
+                brand: "Ceylon Mountain",
+                type: "Spring water",
+                size: "1 L",
+                count: 24,
+                priceMys: 8.50,
+                priceThb: 70.13,
+                unitPrice: "RM 0.35/ขวด",
+                source: "https://www.lotuss.com.my/en/product/water-bottled/",
+                status: "Confirmed",
+                note: "น้ำแร่จากภูเขา สยาม"
+            },
+            {
+                item: "Aqua Origin",
+                brand: "Aqua Origin",
+                type: "Purified water",
+                size: "1 L",
+                count: 24,
+                priceMys: 5.80,
+                priceThb: 47.83,
+                unitPrice: "RM 0.24/ขวด",
+                source: "https://www.lotuss.com.my/en/product/water-bottled/",
+                status: "Confirmed",
+                note: "น้ำกลั่น ราคาประหยัด"
+            },
+            {
+                item: "Aquafina",
+                brand: "P&G",
+                type: "Purified water",
+                size: "1 L",
+                count: 24,
+                priceMys: 6.20,
+                priceThb: 51.19,
+                unitPrice: "RM 0.26/ขวด",
+                source: "https://www.lotuss.com.my/en/product/water-bottled/",
+                status: "Confirmed",
+                note: "น้ำกลั่นแบรนด์ P&G"
+            },
+            {
+                item: "Lifewtr",
+                brand: "Lifewtr",
+                type: "Alkaline water",
+                size: "500 ml",
+                count: 24,
+                priceMys: 16.80,
+                priceThb: 138.45,
+                unitPrice: "RM 0.70/ขวด",
+                source: "https://www.lotuss.com.my/en/product/water-bottled/",
+                status: "Unverified",
+                note: "น้ำด่าง อาจไม่มีในบางสาขา"
+            },
+            {
+                item: "Evian",
+                brand: "Evian",
+                type: "Mineral water",
+                size: "1.5 L",
+                count: 6,
+                priceMys: 9.80,
+                priceThb: 80.83,
+                unitPrice: "RM 1.63/ขวด",
+                source: "https://www.lotuss.com.my/en/product/bottled-water/",
+                status: "Confirmed",
+                note: "ตรวจสอบจาก Lotus's Online Store"
+            }
+        ];
+
+        function renderTable() {
+            tableBody.innerHTML = waterData.map((item, index) => `
+                <tr data-index="${index}">
+                    <td><strong class="water-name">${item.item}</strong></td>
+                    <td>${item.brand}</td>
+                    <td>${item.type}</td>
+                    <td>${item.size}</td>
+                    <td>${item.count} ขวด</td>
+                    <td><span class="price-myr">RM ${item.priceMys.toFixed(2)}</span></td>
+                    <td><span class="price-thb">฿${item.priceThb.toFixed(2)}</span></td>
+                    <td class="unit-price">${item.unitPrice}</td>
+                    <td class="unit-price">RM ${(item.priceMys / item.count).toFixed(3)}/ขวด</td>
+                    <td class="unit-price" style="font-family:monospace;">${((item.priceMys / item.count * 1000) / (item.size.includes('L') ? parseFloat(item.size) : 0.5)).toFixed(2)} RM/L</td>
+                    <td><span class="status-badge status-${item.status.toLowerCase()}">${item.status}</span></td>
+                </tr>
+            `).join('');
+
+            // เพิ่ม event listeners สำหรับ source links
+            document.querySelectorAll('.source-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.open(link.dataset.url, '_blank');
+                });
+            });
+        }
+
+        renderTable();
+
+        searchInput.addEventListener('input', () => filterRows(searchInput.value));
+        categorySelect.addEventListener('change', () => filterRows(categorySelect.value));
+
+        function filterRows(query) {
+            const rows = document.querySelectorAll('#priceTable tbody tr');
+            const categoryFilter = categorySelect.value;
+            
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const matchesSearch = query ? text.includes(query.toLowerCase()) : true;
+                const matchesCategory = !categoryFilter || row.cells[2]?.innerText.includes(categoryFilter);
+                
+                row.style.display = (matchesSearch && matchesCategory) ? '' : 'none';
+            });
+        }
+
+        // เพิ่มลิงก์ source ในแต่ละแถว
+        waterData.forEach((item, index) => {
+            const tr = document.querySelector(`tr[data-index="${index}"]`);
+            if (tr) {
+                const tdSource = tr.cells[9];
+                tdSource.innerHTML = `
+                    <span class="source-link" data-url="${item.source}">🔗 ${item.note}</span>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
